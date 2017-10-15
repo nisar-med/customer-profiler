@@ -1,0 +1,15 @@
+Instructions
+------------
+In order to run this application, you need following
+
+- JDK 1.8
+- Maven
+- Git
+
+Use Git to clone repository on your computer
+
+$ git clone https://github.com/nisar-med/customer-profiler.git
+$ cd customer-profiler
+$ mvn spring-boot:run
+
+Navigate your browser to http://localhost:8080
