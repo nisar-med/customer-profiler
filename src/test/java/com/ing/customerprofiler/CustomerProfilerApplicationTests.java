@@ -37,5 +37,10 @@ public class CustomerProfilerApplicationTests {
 		double balance = transactions.stream().mapToDouble(Transaction::getAmount).sum();
 		Assert.assertTrue(Double.compare(balance,421.27)==0);
 	}
+	@Test
+	public void testCustomer1IsPotentialSaver() {
+		CustomerProfile profile = transactionService.getCustomerProfile(1L, "2016-05");
+		Assert.assertTrue(profile.getClassifications().contains("Potential Saver"));
+	}
 
 }

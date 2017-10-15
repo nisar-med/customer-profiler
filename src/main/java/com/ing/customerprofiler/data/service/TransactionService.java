@@ -74,9 +74,9 @@ public class TransactionService {
 
         return profile;
     }
-    public boolean isAfternoonPerson(List<Transaction> Transactions) {
+    public boolean isAfternoonPerson(List<Transaction> transactions) {
         int afterMidDay=0, total=0;
-        for(Transaction Transaction : Transactions) {
+        for(Transaction Transaction : transactions) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(Transaction.getDate());
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -89,9 +89,9 @@ public class TransactionService {
         double percentage = (double)afterMidDay / (double)total;
         return percentage > 0.5;
     }
-    public boolean isMorningPerson(List<Transaction> Transactions) {
+    public boolean isMorningPerson(List<Transaction> transactions) {
         int afterMidDay=0, total=0;
-        for(Transaction Transaction : Transactions) {
+        for(Transaction Transaction : transactions) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(Transaction.getDate());
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -104,9 +104,9 @@ public class TransactionService {
         double percentage = (double)afterMidDay / (double)total;
         return percentage > 0.5;
     }
-    public boolean isBigSpender(List<Transaction> Transactions) {
+    public boolean isBigSpender(List<Transaction> transactions) {
         double credits=0, debits=0;
-        for(Transaction Transaction : Transactions) {
+        for(Transaction Transaction : transactions) {
             double amount = Transaction.getAmount();
             if(amount >= 0) {
                 credits += amount;
@@ -118,8 +118,8 @@ public class TransactionService {
         double percentage = debits / credits;
         return percentage > 0.8;
     }
-    public boolean isBigTicketSpender(List<Transaction> Transactions) {
-        for(Transaction Transaction : Transactions) {
+    public boolean isBigTicketSpender(List<Transaction> transactions) {
+        for(Transaction Transaction : transactions) {
             double amount = Transaction.getAmount();
             if(amount < 0 && Math.abs(amount) > 1000) {
                 return true;
@@ -127,17 +127,16 @@ public class TransactionService {
         }
         return false;
     }
-    public boolean isPotentialSaver(List<Transaction> Transactions) {
-        double deposits=0, withdrawls=0;
-        for(Transaction Transaction : Transactions) {
-            double amount = Transaction.getAmount();
-            if(amount >= 0) {
-                deposits += amount;
-            }
-            else {
-                withdrawls += Math.abs(amount);
-            }
-        }
+    public boolean isPotentialSaver(List<Transaction> transactions) {
+        double deposits = transactions.stream().
+                filter(t->t.getAmount()>=0).
+                mapToDouble(Transaction::getAmount).
+                sum();
+        double withdrawls = Math.abs(transactions.stream().
+                filter(t->t.getAmount()<0).
+                mapToDouble(Transaction::getAmount).
+                sum());
+
         double percentage = withdrawls/deposits;
         return percentage < 0.25;
     }
