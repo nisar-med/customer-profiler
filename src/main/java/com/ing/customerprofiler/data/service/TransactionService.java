@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -23,12 +24,14 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    public List<Transaction> getTransactions() {
+    public List<Transaction> getTransactions(Long customerId) {
         List<Transaction> transactions = new ArrayList<>();
-
-        transactionRepository.findAll().forEach(t->{
-            transactions.add(t);
-        });
+        if(customerId != null) {
+            transactions.addAll(transactionRepository.findByCustomerId(customerId));
+        }
+        else {
+            transactionRepository.findAll().forEach(transactions::add);
+        }
         return transactions;
     }
     public CustomerProfile getCustomerProfile(Long customerId, String period) {

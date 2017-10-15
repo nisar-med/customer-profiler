@@ -1,6 +1,7 @@
 package com.ing.customerprofiler;
 
 import com.ing.customerprofiler.data.domain.CustomerProfile;
+import com.ing.customerprofiler.data.entity.Transaction;
 import com.ing.customerprofiler.data.service.TransactionService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,24 +10,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CustomerProfilerApplicationTests {
 
 	@Autowired
-	TransactionService transactionService;
+	private TransactionService transactionService;
 
 	@Test
 	public void contextLoads() {
 	}
 	@Test
 	public void testTransactionCount() {
-		Assert.assertTrue(transactionService.getTransactions().stream().count() == 2995);
+		Assert.assertTrue((long) transactionService.getTransactions(null).size() == 2995);
 	}
 	@Test
 	public void testInvalidPeriodHandled() {
-		CustomerProfile profile = transactionService.getCustomerProfile(Long.valueOf(1), "2015");
-		Assert.assertTrue(profile.getTransactions().stream().count() == 0);
+		CustomerProfile profile = transactionService.getCustomerProfile(1L, "2015");
+		Assert.assertTrue((long) profile.getTransactions().size() == 0);
+	}
+	@Test
+	public void testCustomer1Balance() {
+		List<Transaction> transactions = transactionService.getTransactions(1L);
+		double balance = transactions.stream().mapToDouble(Transaction::getAmount).sum();
+		Assert.assertTrue(Double.compare(balance,421.27)==0);
 	}
 
 }
