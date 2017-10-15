@@ -50,6 +50,92 @@ public class TransactionService {
         else {
             transactions = transactionRepository.findByCustomerId(customerId);
         }
-        return new CustomerProfile(transactions);
+        CustomerProfile profile = new CustomerProfile(transactions);
+        double balance = transactions.stream().mapToDouble(t->t.getAmount()).sum();
+        profile.setBalance(balance);
+        if(isAfternoonPerson(transactions)) {
+            profile.addClassification("Afternoon Person");
+        }
+        if(isMorningPerson(transactions)) {
+            profile.addClassification("Morning Person");
+        }
+        if(isBigSpender(transactions)) {
+            profile.addClassification("Big Spender");
+        }
+        if(isBigTicketSpender(transactions)) {
+            profile.addClassification("Bit Ticket Spender");
+        }
+        if(isPotentialSaver(transactions)) {
+            profile.addClassification("Potential Saver");
+        }
+
+        return profile;
+    }
+    public boolean isAfternoonPerson(List<Transaction> Transactions) {
+        int afterMidDay=0, total=0;
+        for(Transaction Transaction : Transactions) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(Transaction.getDate());
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            if(hour > 12) {
+                afterMidDay++;
+            }
+            total++;
+
+        }
+        double percentage = (double)afterMidDay / (double)total;
+        return percentage > 0.5;
+    }
+    public boolean isMorningPerson(List<Transaction> Transactions) {
+        int afterMidDay=0, total=0;
+        for(Transaction Transaction : Transactions) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(Transaction.getDate());
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            if(hour < 12) {
+                afterMidDay++;
+            }
+            total++;
+
+        }
+        double percentage = (double)afterMidDay / (double)total;
+        return percentage > 0.5;
+    }
+    public boolean isBigSpender(List<Transaction> Transactions) {
+        double credits=0, debits=0;
+        for(Transaction Transaction : Transactions) {
+            double amount = Transaction.getAmount();
+            if(amount >= 0) {
+                credits += amount;
+            }
+            else {
+                debits += Math.abs(amount);
+            }
+        }
+        double percentage = debits / credits;
+        return percentage > 0.8;
+    }
+    public boolean isBigTicketSpender(List<Transaction> Transactions) {
+        for(Transaction Transaction : Transactions) {
+            double amount = Transaction.getAmount();
+            if(amount < 0 && Math.abs(amount) > 1000) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isPotentialSaver(List<Transaction> Transactions) {
+        double deposits=0, withdrawls=0;
+        for(Transaction Transaction : Transactions) {
+            double amount = Transaction.getAmount();
+            if(amount >= 0) {
+                deposits += amount;
+            }
+            else {
+                withdrawls += Math.abs(amount);
+            }
+        }
+        double percentage = withdrawls/deposits;
+        return percentage < 0.25;
     }
 }

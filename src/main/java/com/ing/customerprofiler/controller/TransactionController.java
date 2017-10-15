@@ -21,6 +21,8 @@ public class TransactionController {
                         Model model) {
         CustomerProfile profile = transactionService.getCustomerProfile(customerId, period);
         model.addAttribute("transactions", profile.getTransactions());
+        model.addAttribute("classifications", profile.getClassifications());
+        model.addAttribute("balance", profile.getBalance());
         return "statement";
     }
 
