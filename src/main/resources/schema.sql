@@ -1,1 +1,1 @@
-CREATE TABLE Transaction (CustomerId INT, Date TIMESTAMP, Amount DOUBLE, Description VARCHAR(128));
+CREATE TABLE Transaction (id INT AUTO_INCREMENT PRIMARY KEY, CustomerId INT, Date TIMESTAMP, Amount DOUBLE, Description VARCHAR(128));

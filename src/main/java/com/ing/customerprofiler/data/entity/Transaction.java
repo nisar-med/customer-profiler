@@ -1,12 +1,14 @@
 package com.ing.customerprofiler.data.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class Transaction {
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private long id;
+    @Column(name="CUSTOMERID")
     private long customerId;
     private Date date;
     private double amount;
