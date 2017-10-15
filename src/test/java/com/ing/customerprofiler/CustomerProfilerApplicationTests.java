@@ -1,5 +1,6 @@
 package com.ing.customerprofiler;
 
+import com.ing.customerprofiler.data.domain.CustomerProfile;
 import com.ing.customerprofiler.data.service.TransactionService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,6 +22,11 @@ public class CustomerProfilerApplicationTests {
 	@Test
 	public void testTransactionCount() {
 		Assert.assertTrue(transactionService.getTransactions().stream().count() == 2995);
+	}
+	@Test
+	public void testInvalidPeriodHandled() {
+		CustomerProfile profile = transactionService.getCustomerProfile(Long.valueOf(1), "2015");
+		Assert.assertTrue(profile.getTransactions().stream().count() == 0);
 	}
 
 }
