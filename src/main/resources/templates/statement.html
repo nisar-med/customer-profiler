@@ -3,25 +3,55 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Statement</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"/>
+
 </head>
 <body>
-    <div> Statement </div>
-    <table>
-        <thead>
-            <th>Customer Id</th>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Description</th>
-        </thead>
-        <tbody>
-            <tr th:each = "transaction : ${transactions}">
-                <td th:text="${transaction.customerId}"></td>
-                <td th:text="${transaction.date}"></td>
-                <td th:text="${transaction.amount}"></td>
-                <td th:text="${transaction.description}"></td>
-            </tr>
+    <div class="container">
+        <h1> Customer Profile </h1>
+        <form action="/" method="GET">
+            <span>Customer ID: </span>
+            <select name="customerid">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+            <span>Month: </span>
+            <select name="month">
+                <option value="2016-05">2016-05</option>
+                <option value="2016-06">2016-06</option>
+                <option value="2016-07">2016-07</option>
+                <option value="2016-08">2016-08</option>
+            </select>
+            <input type="submit" value="Submit"/>
+        </form>
+        <div class="d-flex flex-row">
+            <div>Balance:</div>
+            <div th:text="${#numbers.formatDecimal(balance, 0, 2)}"></div>
+        </div>
+        <div>Classification:</div>
+        <ul class="list-group" th:each="classification: ${classifications}">
+            <li class="list-group-item" th:text="${classification}"></li>
+        </ul>
+        <div>Transactions:</div>
+        <table class="table">
+            <thead>
+                <th>Customer Id</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Description</th>
+            </thead>
+            <tbody>
+                <tr th:each = "transaction : ${transactions}">
+                    <td th:text="${transaction.customerId}"></td>
+                    <td th:text="${transaction.date}"></td>
+                    <td th:text="${#numbers.formatDecimal(transaction.amount, 0, 2)}"></td>
+                    <td th:text="${transaction.description}"></td>
+                </tr>
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
