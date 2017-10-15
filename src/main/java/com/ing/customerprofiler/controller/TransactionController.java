@@ -16,8 +16,10 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @RequestMapping(method= RequestMethod.GET)
-    public String index(@RequestParam(value="customerid", required=false)Long customerId, Model model) {
-        CustomerProfile profile = transactionService.getCustomerProfile(customerId);
+    public String index(@RequestParam(value="customerid", required=false)Long customerId,
+                        @RequestParam(value="period", required=false)String period,
+                        Model model) {
+        CustomerProfile profile = transactionService.getCustomerProfile(customerId, period);
         model.addAttribute("transactions", profile.getTransactions());
         return "statement";
     }
