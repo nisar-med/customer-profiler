@@ -1,0 +1,1 @@
+CREATE TABLE Transaction (CustomerId INT, Date TIMESTAMP, Amount DOUBLE, Description VARCHAR(128));
