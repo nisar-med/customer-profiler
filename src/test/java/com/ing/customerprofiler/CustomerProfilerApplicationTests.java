@@ -42,5 +42,10 @@ public class CustomerProfilerApplicationTests {
 		CustomerProfile profile = transactionService.getCustomerProfile(1L, "2016-05");
 		Assert.assertTrue(profile.getClassifications().contains("Potential Saver"));
 	}
+	@Test
+	public void testCustomer1IsNotMorningPerson() {
+		CustomerProfile profile = transactionService.getCustomerProfile(1L, "2016-05");
+		Assert.assertFalse(profile.getClassifications().contains("Morning Person"));
+	}
 
 }
